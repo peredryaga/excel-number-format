@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals, print_function
 import re
+from formatcode.lexer import locals
 
 
 class Token(object):
@@ -22,6 +23,46 @@ class SingleSymbolPh(Token):
             return 1
 
 
+class DigitPh(SingleSymbolPh):
+    pass
+
+
+class ZeroPh(DigitPh):
+    symbol = locals.ZERO
+
+
+class QPh(DigitPh):
+    symbol = locals.QUESTION
+
+
+class HashPh(DigitPh):
+    symbol = locals.HASH
+
+
+class CommaDelimiter(SingleSymbolPh):
+    symbol = locals.COMMA
+
+
+class FractionDelimiter(SingleSymbolPh):
+    symbol = locals.DOT
+
+
+class PercentageSymbol(SingleSymbolPh):
+    symbol = locals.PERCENT
+
+
+class AtSymbol(SingleSymbolPh):
+    symbol = locals.AT
+
+
+class AsteriskSymbol(SingleSymbolPh):
+    symbol = locals.ASTERISK
+
+
+class UnderscoreSymbol(SingleSymbolPh):
+    symbol = locals.UNDERSCORE
+
+
 class RegexpToken(Token):
     regexp = None
 
@@ -32,48 +73,8 @@ class RegexpToken(Token):
             return m.end()
 
 
-class DigitPh(SingleSymbolPh):
-    pass
-
-
-class ZeroPh(DigitPh):
-    symbol = '0'
-
-
-class QPh(DigitPh):
-    symbol = '?'
-
-
-class HashPh(DigitPh):
-    symbol = '#'
-
-
-class CommaDelimiter(SingleSymbolPh):
-    symbol = ','
-
-
-class FractionDelimiter(SingleSymbolPh):
-    symbol = '.'
-
-
-class PercentageSymbol(SingleSymbolPh):
-    symbol = '%'
-
-
-class AtSymbol(SingleSymbolPh):
-    symbol = '@'
-
-
-class AsteriskSymbol(SingleSymbolPh):
-    symbol = '*'
-
-
-class UnderscoreSymbol(SingleSymbolPh):
-    symbol = '_'
-
-
 class StringSymbol(RegexpToken):
-    regexp = re.compile(r'(?P<str>(^[$+\-/():!^&\'~{}<>= ]|(?<=^\\).|"[^"]*"))')
+    regexp = re.compile(r'(?P<value>(^[$+\-/():!^&\'~{}<>= ]|(?<=^\\).|"[^"]*"))')
 
 
 class ScientificNotationToken(RegexpToken):
