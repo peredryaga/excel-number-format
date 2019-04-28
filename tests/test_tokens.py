@@ -6,8 +6,8 @@ import pytest
 from six.moves import range
 
 from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, ColorToken, CommaDelimiter, ConditionToken,
-                                     DateTimeToken, FractionDelimiter, HashToken, LocaleCurrencyToken, PercentageSymbol,
-                                     QToken, ScientificNotationToken, StringSymbol, TimeDeltaToken, UnderscoreSymbol,
+                                     DateTimeToken, DotDelimiter, HashToken, LocaleCurrencyToken, PercentageSymbol,
+                                     QToken, EToken, StringSymbol, TimeDeltaToken, UnderscoreSymbol,
                                      ZeroToken, BlockDelimiter)
 
 
@@ -47,10 +47,10 @@ def test_comma():
 
 
 def test_fraction():
-    assert FractionDelimiter.match('.') == 1
-    assert FractionDelimiter.match('1') is None
+    assert DotDelimiter.match('.') == 1
+    assert DotDelimiter.match('1') is None
 
-    assert FractionDelimiter('.').cleaned_data == '.'
+    assert DotDelimiter('.').cleaned_data == '.'
 
 
 def test_percentage():
@@ -111,15 +111,15 @@ def test_string_with_quote():
 @pytest.mark.parametrize('base', ['0', '00', '12', '555'])
 def test_scientific_notation(letter, sign, base):
     line = letter + sign + base
-    assert ScientificNotationToken.match(line) == len(line)
+    assert EToken.match(line) == len(line)
 
-    token = ScientificNotationToken(line)
+    token = EToken(line)
     assert token.letter == letter
     assert token.sign == sign
     assert token.base == int(base)
 
-    assert ScientificNotationToken.match(line + 'test') == len(line)
-    assert ScientificNotationToken.match('test' + line) is None
+    assert EToken.match(line + 'test') == len(line)
+    assert EToken.match('test' + line) is None
 
 
 @pytest.mark.parametrize('line', ['Black', 'Green', 'White', 'Blue', 'Magenta', 'Yellow', 'Cyan', 'Red',

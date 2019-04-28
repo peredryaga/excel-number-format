@@ -56,7 +56,7 @@ class CommaDelimiter(SingleSymbolToken):
     symbol = locals.COMMA
 
 
-class FractionDelimiter(SingleSymbolToken):
+class DotDelimiter(SingleSymbolToken):
     symbol = locals.DOT
 
 
@@ -102,11 +102,11 @@ class StringSymbol(RegexpToken):
         return m
 
 
-class ScientificNotationToken(RegexpToken):
+class EToken(RegexpToken):
     regexp = re.compile(r'^(?P<letter>[eE])(?P<sign>[\-+])(?P<base>[0-9]+)')
 
     def clean(self, value):
-        m = super(ScientificNotationToken, self).clean(value)
+        m = super(EToken, self).clean(value)
         m['base'] = int(m['base'])
         return m
 

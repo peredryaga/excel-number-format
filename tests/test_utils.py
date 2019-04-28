@@ -4,7 +4,7 @@ from __future__ import division, print_function, unicode_literals
 
 from six import add_metaclass
 
-from formatcode.base.utils import Singleton, cached_property
+from formatcode.base.utils import cached_property, Singleton
 
 
 def test_singleton():
