@@ -23,7 +23,7 @@ class Token(object):
 
 
 @add_metaclass(Singleton)
-class SingleSymbolPh(Token):
+class SingleSymbolToken(Token):
     symbol = None
 
     @classmethod
@@ -32,43 +32,47 @@ class SingleSymbolPh(Token):
             return 1
 
 
-class DigitPh(SingleSymbolPh):
+class BlockDelimiter(SingleSymbolToken):
+    symbol = ';'
+
+
+class DigitToken(SingleSymbolToken):
     pass
 
 
-class ZeroPh(DigitPh):
+class ZeroToken(DigitToken):
     symbol = locals.ZERO
 
 
-class QPh(DigitPh):
+class QToken(DigitToken):
     symbol = locals.QUESTION
 
 
-class HashPh(DigitPh):
+class HashToken(DigitToken):
     symbol = locals.HASH
 
 
-class CommaDelimiter(SingleSymbolPh):
+class CommaDelimiter(SingleSymbolToken):
     symbol = locals.COMMA
 
 
-class FractionDelimiter(SingleSymbolPh):
+class FractionDelimiter(SingleSymbolToken):
     symbol = locals.DOT
 
 
-class PercentageSymbol(SingleSymbolPh):
+class PercentageSymbol(SingleSymbolToken):
     symbol = locals.PERCENT
 
 
-class AtSymbol(SingleSymbolPh):
+class AtSymbol(SingleSymbolToken):
     symbol = locals.AT
 
 
-class AsteriskSymbol(SingleSymbolPh):
+class AsteriskSymbol(SingleSymbolToken):
     symbol = locals.ASTERISK
 
 
-class UnderscoreSymbol(SingleSymbolPh):
+class UnderscoreSymbol(SingleSymbolToken):
     symbol = locals.UNDERSCORE
 
 

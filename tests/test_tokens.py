@@ -6,30 +6,37 @@ import pytest
 from six.moves import range
 
 from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, ColorToken, CommaDelimiter, ConditionToken,
-                                     DateTimeToken, FractionDelimiter, HashPh, LocaleCurrencyToken, PercentageSymbol,
-                                     QPh, ScientificNotationToken, StringSymbol, TimeDeltaToken, UnderscoreSymbol,
-                                     ZeroPh)
+                                     DateTimeToken, FractionDelimiter, HashToken, LocaleCurrencyToken, PercentageSymbol,
+                                     QToken, ScientificNotationToken, StringSymbol, TimeDeltaToken, UnderscoreSymbol,
+                                     ZeroToken, BlockDelimiter)
+
+
+def test_block_delimiter():
+    assert BlockDelimiter.match(';') == 1
+    assert BlockDelimiter.match('1') is None
+
+    assert BlockDelimiter(';').cleaned_data == ';'
 
 
 def test_zero():
-    assert ZeroPh.match('0') == 1
-    assert ZeroPh.match('1') is None
+    assert ZeroToken.match('0') == 1
+    assert ZeroToken.match('1') is None
 
-    assert ZeroPh('0').cleaned_data == '0'
+    assert ZeroToken('0').cleaned_data == '0'
 
 
 def test_q():
-    assert QPh.match('?') == 1
-    assert QPh.match('1') is None
+    assert QToken.match('?') == 1
+    assert QToken.match('1') is None
 
-    assert QPh('?').cleaned_data == '?'
+    assert QToken('?').cleaned_data == '?'
 
 
 def test_hash():
-    assert HashPh.match('#') == 1
-    assert HashPh.match('1') is None
+    assert HashToken.match('#') == 1
+    assert HashToken.match('1') is None
 
-    assert HashPh('#').cleaned_data == '#'
+    assert HashToken('#').cleaned_data == '#'
 
 
 def test_comma():
