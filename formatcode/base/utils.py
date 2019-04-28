@@ -1,6 +1,7 @@
 # coding: utf8
 
-from __future__ import unicode_literals, print_function
+from __future__ import division, print_function, unicode_literals
+
 from abc import ABCMeta
 
 
@@ -11,3 +12,12 @@ class Singleton(ABCMeta):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
+
+
+class cached_property(object):
+    def __init__(self, func):
+        self.func = func
+
+    def __get__(self, instance, cls=None):
+        result = instance.__dict__[self.func.__name__] = self.func(instance)
+        return result
