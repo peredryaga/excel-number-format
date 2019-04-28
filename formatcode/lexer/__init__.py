@@ -1,3 +1,3 @@
 # coding: utf8
 
-from __future__ import unicode_literals, print_function
+from __future__ import division, print_function, unicode_literals
