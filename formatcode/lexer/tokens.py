@@ -130,7 +130,7 @@ class DateTimeToken(RegexpToken):
 
 
 class TimeDeltaToken(RegexpToken):
-    regexp = re.compile(r'^\[(?P<value>((yy){1,2}|m{1,5}|d{1,4}|h{1,2}|s{1,2}))]')
+    regexp = re.compile(r'^\[(?P<value>[hms]+)]')
 
 
 class AmPmToken(RegexpToken):

@@ -148,10 +148,16 @@ def test_condition(sign, value):
 
 @pytest.mark.parametrize('line', ['yy', 'yyyy', 'm', 'mm', 'mmm', 'mmmm', 'mmmmm',
                                   'd', 'dd', 'ddd', 'dddd', 'h', 'hh', 's', 'ss'])
-def test_time(line):
+def test_date(line):
     assert DateTimeToken.match(line) == len(line)
     assert DateTimeToken(line).value == line
     assert DateTimeToken.match('[%s]' % line) is None
+
+
+@pytest.mark.parametrize('line', ['h', 'm', 's'])
+@pytest.mark.parametrize('count', [1, 2, 4, 8])
+def test_timedelta(line, count):
+    line = ''.join([line] * count)
 
     assert TimeDeltaToken.match(line) is None
     assert TimeDeltaToken.match('[%s]' % line) == len(line) + 2
