@@ -10,3 +10,7 @@ class ConverterError(FormatCodeError):
 
 class ConditionError(ConverterError):
     pass
+
+
+class PartsCountError(ConverterError):
+    pass
