@@ -1,6 +1,7 @@
 # coding: utf8
 
 from __future__ import division, print_function, unicode_literals
+
 from formatcode.base.errors import FormatCodeError
 
 
@@ -13,4 +14,8 @@ class ConditionError(ConverterError):
 
 
 class PartsCountError(ConverterError):
+    pass
+
+
+class PartTypeError(ConverterError):
     pass
