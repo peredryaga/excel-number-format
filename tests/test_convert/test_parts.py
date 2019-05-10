@@ -10,55 +10,71 @@ from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler
                                          UnknownHandler, GeneralHandler)
 from formatcode.convert.parts import NegativePart, PositivePart, StringPart, ZeroPart
 from formatcode.lexer.lexer import to_tokens_line
+from decimal import Decimal
+
+
+def to_decimal(value):
+    try:
+        return Decimal(value)
+    except:
+        pass
 
 
 @pytest.fixture(scope='module')
 def fc():
     class FormatCodeMock(object):
         def __init__(self):
+            self.pos_part = PositivePart(fc=self, tokens=[])
+            self.neg_part = NegativePart(fc=self, tokens=[])
             self.else_part = ZeroPart(fc=self, tokens=[])
+            self.str_part = StringPart(fc=self, tokens=[])
 
     return FormatCodeMock()
 
 
 @pytest.mark.parametrize('value', [1234, 1234.1234, 0, u'string', None])
 def test_positive_part(value, fc):
+    value = to_decimal(value)
+
     tokens = to_tokens_line('0.0')
     part = PositivePart(fc=fc, tokens=tokens)
-    is_positive = isinstance(value, (float, int)) and value > 0
+    is_positive = isinstance(value, Decimal) and value > 0
 
     assert part.handler_class == DigitHandler
     assert part.check_value(value) is is_positive
-    assert part.check_value(text_type(value)) is is_positive
 
 
 @pytest.mark.parametrize('value', [1234, 1234.1234, 0, u'string', None])
 def test_negative_part(value, fc):
+    value = to_decimal(value)
+
     tokens = to_tokens_line('0.0')
     part = NegativePart(fc=fc, tokens=tokens)
-    is_negative = isinstance(value, (float, int)) and value < 0
+    is_negative = isinstance(value, Decimal) and value < 0
 
     assert part.handler_class == DigitHandler
     assert part.check_value(value) is is_negative
-    assert part.check_value(text_type(value)) is is_negative
 
 
 @pytest.mark.parametrize('value', [1234, 1234.1234, 0, u'string', None])
 def test_zero_part(value, fc):
+    value = to_decimal(value)
+
     tokens = to_tokens_line('0.0')
     part = ZeroPart(fc=fc, tokens=tokens)
-    is_zero = isinstance(value, (float, int)) and value == 0
+    is_zero = isinstance(value, Decimal) and value == 0
 
     assert part.handler_class == DigitHandler
     assert part.check_value(value) is is_zero
-    assert part.check_value(text_type(value)) is is_zero
 
 
 @pytest.mark.parametrize('value', [1234, 1234.1234, 0, u'string', None])
 def test_string_part(value, fc):
+    value = to_decimal(value)
+
     tokens = to_tokens_line('"hello"')
     part = StringPart(fc=fc, tokens=tokens)
-    is_digit = isinstance(value, (float, int))
+    is_digit = isinstance(value, Decimal)
 
     assert part.handler_class == StringHandler
     assert part.check_value(value) is not is_digit
@@ -125,6 +141,8 @@ def test_part_validate(fc):
 @pytest.mark.parametrize('part', (PositivePart, NegativePart))
 @pytest.mark.parametrize('value', (-100, 0, 100))
 def test_condition_checker(symbol, r1, r2, r3, part, value, fc):
+    value = to_decimal(value)
+
     part = part(fc=fc, tokens=to_tokens_line('[%s%s]0.0' % (symbol, value)))
     assert part.check_value(value + 1) is r1
     assert part.check_value(value) is r2

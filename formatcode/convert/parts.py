@@ -21,6 +21,10 @@ class FormatPart(ABC):
     number_system = None
 
     def __init__(self, fc, tokens=None):
+        """
+        :type fc: formatcode.convert.fc.FormatCode
+        :type tokens: list[formatcode.lexer.tokens.Token]
+        """
         self.tokens = tokens
         self.fc = fc
 
@@ -64,7 +68,7 @@ class FormatPart(ABC):
             return EmptyHandler
 
     def format(self, value):
-        pass
+        return self.handler.format(value)
 
 
 class DigitPart(FormatPart):
@@ -90,17 +94,11 @@ class DigitPart(FormatPart):
         else:
             return DigitHandler
 
-    @staticmethod
-    def clean(value):
-        return Decimal(value)
-
     def check_value(self, v):
-        try:
-            v = self.clean(v)
-        except:
-            return False
+        return isinstance(v, Decimal) and self.checker(v)
 
-        return self.checker(v)
+    def format(self, value):
+        return self.handler.format(value)
 
 
 class ConditionFreePart(FormatPart):
