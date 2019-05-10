@@ -84,7 +84,8 @@ class DigitPart(FormatPart):
                 and TimeDeltaToken not in self.token_types \
                 and any(isinstance(t, DigitToken) for t in self.tokens):
             raise DateDigitError(self.tokens)
-        elif AtSymbol in self.token_types:
+
+        if AtSymbol in self.token_types:
             raise IllegalPartToken(self.tokens)
 
     def get_handler(self):

@@ -5,11 +5,11 @@ from __future__ import division, print_function, unicode_literals
 from formatcode.lexer.errors import DuplicateUniqueToken, MatchError
 from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, BlockDelimiter, ColorToken, CommaDelimiter,
                                      ConditionToken, DateTimeToken, DotDelimiter, EToken, GeneralToken, HashToken,
-                                     LocaleCurrencyToken, PercentageSymbol, QToken, StringSymbol, TimeDeltaToken,
-                                     UnderscoreSymbol, ZeroToken)
+                                     LocaleCurrencyToken, PercentageSymbol, QToken, SlashSymbol, StringSymbol,
+                                     TimeDeltaToken, UnderscoreSymbol, ZeroToken)
 
-token_types = [GeneralToken, ZeroToken, QToken, HashToken, CommaDelimiter, DotDelimiter, PercentageSymbol, AtSymbol,
-               AsteriskSymbol, UnderscoreSymbol, StringSymbol, EToken, ColorToken,
+token_types = [GeneralToken, ZeroToken, SlashSymbol, QToken, HashToken, CommaDelimiter, DotDelimiter,
+               PercentageSymbol, AtSymbol, AsteriskSymbol, UnderscoreSymbol, StringSymbol, EToken, ColorToken,
                ConditionToken, DateTimeToken, TimeDeltaToken, AmPmToken, LocaleCurrencyToken, BlockDelimiter]
 
 

@@ -7,8 +7,8 @@ import pytest
 from formatcode.lexer.lexer import DuplicateUniqueToken, MatchError, to_tokens_line
 from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, BlockDelimiter, ColorToken, CommaDelimiter,
                                      ConditionToken, DateTimeToken, DotDelimiter, EToken, GeneralToken, HashToken,
-                                     LocaleCurrencyToken, PercentageSymbol, QToken, StringSymbol, TimeDeltaToken,
-                                     UnderscoreSymbol, ZeroToken)
+                                     LocaleCurrencyToken, PercentageSymbol, QToken, SlashSymbol, StringSymbol,
+                                     TimeDeltaToken, UnderscoreSymbol, ZeroToken)
 
 examples = (
     ('General', [GeneralToken]),
@@ -17,6 +17,7 @@ examples = (
     ('0.#', [ZeroToken, DotDelimiter, HashToken]),
     ('#.0#', [HashToken, DotDelimiter, ZeroToken, HashToken]),
     ('???.???', [QToken] * 3 + [DotDelimiter] + [QToken] * 3),
+    ('#" "???/???', [HashToken, StringSymbol] + [QToken] * 3 + [SlashSymbol] + [QToken] * 3),
     ('#,###', [HashToken, CommaDelimiter] + [HashToken] * 3),
     ('#,', [HashToken, CommaDelimiter]),
     ('0.0', [ZeroToken, DotDelimiter, ZeroToken]),

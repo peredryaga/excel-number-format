@@ -7,8 +7,8 @@ from six.moves import range
 
 from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, BlockDelimiter, ColorToken, CommaDelimiter,
                                      ConditionToken, DateTimeToken, DotDelimiter, EToken, GeneralToken, HashToken,
-                                     LocaleCurrencyToken, PercentageSymbol, QToken, StringSymbol, TimeDeltaToken,
-                                     UnderscoreSymbol, ZeroToken)
+                                     LocaleCurrencyToken, PercentageSymbol, QToken, SlashSymbol, StringSymbol,
+                                     TimeDeltaToken, UnderscoreSymbol, ZeroToken)
 
 
 def test_general_token():
@@ -16,6 +16,13 @@ def test_general_token():
     assert GeneralToken.match('1') is None
 
     assert GeneralToken('General').cleaned_data == 'General'
+
+
+def test_slash_token():
+    assert SlashSymbol.match('/') == 1
+    assert SlashSymbol.match('1') is None
+
+    assert SlashSymbol('/').cleaned_data == '/'
 
 
 def test_block_delimiter():
@@ -88,7 +95,7 @@ def test_underscore():
     assert UnderscoreSymbol('_').cleaned_data == '_'
 
 
-@pytest.mark.parametrize('line', ['$', '+', '-', '/', '(', ')', ':', '!', '^',
+@pytest.mark.parametrize('line', ['$', '+', '-', '(', ')', ':', '!', '^',
                                   '&', "'", '~', '{', '}', '<', '>', '=', ' '])
 def test_string_without_escape(line):
     assert StringSymbol.match(line) == 1

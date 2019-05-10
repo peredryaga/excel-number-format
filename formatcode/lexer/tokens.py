@@ -72,6 +72,10 @@ class AtSymbol(SingleSymbolToken):
     symbol = locals.AT
 
 
+class SlashSymbol(SingleSymbolToken):
+    symbol = locals.SLASH
+
+
 class AsteriskSymbol(SingleSymbolToken):
     symbol = locals.ASTERISK
 
@@ -97,7 +101,7 @@ class RegexpToken(Token):
 
 
 class StringSymbol(RegexpToken):
-    regexp = re.compile(r'(?P<value>(^[$+\-/():!^&\'~{}<>= ]|(?<=^\\).|^"[^"]*"))')
+    regexp = re.compile(r'(?P<value>(^[$+\-():!^&\'~{}<>= ]|(?<=^\\).|^"[^"]*"))')
 
     def clean(self, value):
         m = super(StringSymbol, self).clean(value)
