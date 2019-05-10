@@ -117,7 +117,7 @@ class ColorToken(RegexpToken):
 
 
 class ConditionToken(RegexpToken):
-    regexp = re.compile(r'^\[(?P<sign>(<|>|>=|<=|=|<>))(?P<value>([0-9]+(\.[0-9]+)?))]')
+    regexp = re.compile(r'^\[(?P<op>(<|>|>=|<=|=|<>))(?P<value>([-+]?[0-9]+(\.[0-9]+)?))]')
 
     def clean(self, value):
         m = super(ConditionToken, self).clean(value)

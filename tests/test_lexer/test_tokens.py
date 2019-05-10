@@ -133,17 +133,19 @@ def test_color(line):
     assert ColorToken.match(line + ']') is None
 
 
-@pytest.mark.parametrize('sign', ['<', '>', '=', '<>', '<=', '>='])
+@pytest.mark.parametrize('op', ['<', '>', '=', '<>', '<=', '>='])
 @pytest.mark.parametrize('value', [1, 123, 12345, 123.45, 0.1234])
-def test_condition(sign, value):
-    assert ConditionToken.match('[%s%s]' % (sign, value)) == len(sign) + len(str(value)) + 2
+@pytest.mark.parametrize('sign', ['-', '', '+'])
+def test_condition(op, value, sign):
+    signed_value = (value * -1) if sign == '-' else value
+    assert ConditionToken.match('[%s%s%s]' % (op, sign, value)) == len(op) + len(str(value)) + 2 + len(sign)
 
-    token = ConditionToken('[%s%s]' % (sign, value))
-    assert token.sign == sign
-    assert token.value == value
+    token = ConditionToken('[%s%s%s]' % (op, sign, value))
+    assert token.op == op
+    assert token.value == signed_value
 
-    assert ConditionToken.match('[%s]' % value) is None
-    assert ConditionToken.match('%s' % value) is None
+    assert ConditionToken.match('[%s]' % signed_value) is None
+    assert ConditionToken.match('%s' % signed_value) is None
 
 
 @pytest.mark.parametrize('line', ['yy', 'yyyy', 'm', 'mm', 'mmm', 'mmmm', 'mmmmm',
