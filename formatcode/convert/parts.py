@@ -121,9 +121,9 @@ class ConditionPart(DigitPart):
         '>': gt,
     }
 
-    def __init__(self, *args, **kwargs):
-        super(ConditionPart, self).__init__(*args, **kwargs)
-        self.checker = self.get_condition_checker() or self.get_checker()
+    @cached_property
+    def checker(self):
+        return self.get_condition_checker() or self.get_checker()
 
     def get_condition_checker(self):
         if ConditionToken in self.token_types:
