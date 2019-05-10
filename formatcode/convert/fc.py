@@ -2,11 +2,12 @@
 
 from __future__ import division, print_function, unicode_literals
 
+from six.moves import zip_longest
+
+from formatcode.convert.errors import PartsCountError
+from formatcode.convert.parts import NegativePart, PositivePart, StringPart, ZeroPart
 from formatcode.convert.utils import split_tokens
 from formatcode.lexer.tokens import BlockDelimiter
-from formatcode.convert.errors import PartsCountError
-from formatcode.convert.parts import PositivePart, NegativePart, ZeroPart, StringPart
-from six.moves import zip_longest
 
 parts_types = (PositivePart, NegativePart, ZeroPart, StringPart)
 
