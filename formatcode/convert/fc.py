@@ -13,7 +13,9 @@ parts_types = (PositivePart, NegativePart, ZeroPart, StringPart)
 
 
 class FormatCode(object):
-    def __init__(self, tokens):
+    def __init__(self, tokens, asterisk_repeat_count=0):
+        self.asterisk_repeat_count = asterisk_repeat_count
+
         self.parts = self.parts_from_tokens(tokens)
         self.pos_part, self.neg_part, self.else_part, self.str_part = self.parts
 
