@@ -67,7 +67,9 @@ class DigitPart(FormatPart):
     def validate(self):
         super(DigitPart, self).validate()
 
-        if any(isinstance(t, DigitToken) for t in self.tokens) and DateTimeToken in self.token_types:
+        if DateTimeToken in self.token_types \
+                and TimeDeltaToken not in self.token_types \
+                and any(isinstance(t, DigitToken) for t in self.tokens):
             raise DateDigitError(self.tokens)
         elif AtSymbol in self.token_types:
             raise IllegalPartToken(self.tokens)

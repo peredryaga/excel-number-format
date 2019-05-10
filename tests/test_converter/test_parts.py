@@ -51,7 +51,7 @@ def test_zero_part(value):
 
 @pytest.mark.parametrize('value', [1234, 1234.1234, 0, u'string', None])
 def test_string_part(value):
-    tokens = to_tokens_line('0.0')
+    tokens = to_tokens_line('"hello"')
     part = StringPart(tokens=tokens)
     is_digit = isinstance(value, (float, int))
 
