@@ -21,3 +21,11 @@ class cached_property(object):
     def __get__(self, instance, cls=None):
         result = instance.__dict__[self.func.__name__] = self.func(instance)
         return result
+
+
+def is_digit(value):
+    try:
+        float(value)
+        return True
+    except (ValueError, TypeError):
+        return False

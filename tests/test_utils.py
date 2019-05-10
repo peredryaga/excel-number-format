@@ -4,7 +4,7 @@ from __future__ import division, print_function, unicode_literals
 
 from six import add_metaclass
 
-from formatcode.base.utils import cached_property, Singleton
+from formatcode.base.utils import cached_property, Singleton, is_digit
 
 
 def test_singleton():
@@ -39,3 +39,21 @@ def test_cached_property():
     a.counter = 3
     assert a._counter == 1
     assert a.counter == 3
+
+
+def test_is_digit():
+    assert is_digit(1234) is True
+    assert is_digit(-1234) is True
+    assert is_digit(1234.1234) is True
+    assert is_digit(-1234.1234) is True
+
+    assert is_digit('1234') is True
+    assert is_digit('-1234') is True
+    assert is_digit('1234.1234') is True
+    assert is_digit('-1234.1234') is True
+
+    assert is_digit(None) is False
+    assert is_digit('string') is False
+    assert is_digit('-') is False
+    assert is_digit(type) is False
+    assert is_digit('') is False
