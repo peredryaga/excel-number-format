@@ -4,7 +4,8 @@ from __future__ import division, print_function, unicode_literals
 
 
 class BaseHandler(object):
-    pass
+    def __init__(self, part):
+        self.part = part
 
 
 class DigitHandler(BaseHandler):

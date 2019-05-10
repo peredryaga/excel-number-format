@@ -24,6 +24,8 @@ class FormatPart(ABC):
         self.token_types = [t.__class__ for t in self.tokens or []]
         self.validate()
 
+        self.handler = self.handler_class(part=self)
+
     @abstractmethod
     def get_handler(self):
         pass
@@ -45,8 +47,8 @@ class FormatPart(ABC):
     def validate(self):
         pass
 
-    @cached_property
-    def handler(self):
+    @property
+    def handler_class(self):
         if self.tokens is None:
             return UnknownHandler
         elif self.tokens:
