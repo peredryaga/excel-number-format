@@ -27,7 +27,7 @@ class FormatCode(object):
             # There can be only 4 parts
             raise PartsCountError(tokens)
 
-        parts = [pt(tokens=ts, fc=self) for pt, ts in zip_longest(parts_types, tokens_by_part)]
+        parts = [pt(fc=self, tokens=ts) for pt, ts in zip_longest(parts_types, tokens_by_part)]
         return parts
 
     def format(self, value):

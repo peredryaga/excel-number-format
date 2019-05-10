@@ -20,7 +20,7 @@ class FormatPart(ABC):
     color = None
     number_system = None
 
-    def __init__(self, tokens=None, fc=None):
+    def __init__(self, fc, tokens=None):
         self.tokens = tokens
         self.fc = fc
 
@@ -133,7 +133,7 @@ class ConditionPart(DigitPart):
 
 class PositivePart(ConditionPart):
     def get_checker(self):
-        if self.fc and self.fc.else_part.tokens is None:
+        if self.fc.else_part.tokens is None:
             return lambda v: v >= 0
         else:
             return lambda v: v > 0
