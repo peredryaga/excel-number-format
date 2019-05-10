@@ -19,8 +19,10 @@ class FormatPart(ABC):
     color = None
     number_system = None
 
-    def __init__(self, tokens=None):
+    def __init__(self, tokens=None, fc=None):
         self.tokens = tokens
+        self.fc = fc
+
         self.token_types = [t.__class__ for t in self.tokens or []]
         self.validate()
 
@@ -126,7 +128,10 @@ class ConditionPart(DigitPart):
 
 class PositivePart(ConditionPart):
     def get_checker(self):
-        return lambda v: v > 0
+        if self.fc and self.fc.else_part.tokens is None:
+            return lambda v: v >= 0
+        else:
+            return lambda v: v > 0
 
 
 class NegativePart(ConditionPart):

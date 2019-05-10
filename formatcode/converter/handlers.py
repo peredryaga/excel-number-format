@@ -7,6 +7,9 @@ class BaseHandler(object):
     def __init__(self, part):
         self.part = part
 
+    def format(self, v):
+        return v
+
 
 class DigitHandler(BaseHandler):
     pass
