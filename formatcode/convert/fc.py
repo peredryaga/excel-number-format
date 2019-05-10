@@ -15,12 +15,15 @@ parts_types = (PositivePart, NegativePart, ZeroPart, StringPart)
 class FormatCode(object):
     def __init__(self, tokens):
         self.parts = self.parts_from_tokens(tokens)
-        self.else_part = self.parts[2]
+        self.pos_part, self.neg_part, self.else_part, self.str_part = self.parts
+
+        for part in self.parts:
+            part.handler.configure()
 
     def parts_from_tokens(self, tokens):
         """
         :param list tokens: Tokens line
-        :rtype: list[formatcode.converter.parts.FormatPart]
+        :rtype: list[formatcode.convert.parts.FormatPart]
         """
         tokens_by_part = split_tokens(tokens, BlockDelimiter)
 
