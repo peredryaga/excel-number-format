@@ -1,13 +1,10 @@
-# coding: utf8
+# coding: utf-8
 
 from __future__ import division, print_function, unicode_literals
 
-import pytest
-
-from formatcode.converter.errors import ConditionError, PartsCountError
 from formatcode.converter.utils import split_tokens
-from formatcode.lexer.tokens import (BlockDelimiter, ColorToken, ConditionToken, DateTimeToken, DotDelimiter,
-                                     StringSymbol, TimeDeltaToken, ZeroToken)
+from formatcode.lexer.tokens import (BlockDelimiter, ColorToken, ConditionToken, DotDelimiter,
+                                     ZeroToken)
 
 
 def test_split_tokens():

@@ -1,4 +1,4 @@
-# coding: utf8
+# coding: utf-8
 
 from __future__ import division, print_function, unicode_literals
 from formatcode.base.errors import FormatCodeError
