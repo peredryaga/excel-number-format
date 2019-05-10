@@ -13,6 +13,7 @@ class BaseHandler(ABC):
         :type part: formatcode.convert.parts.FormatPart
         """
         self.part = part
+        self.fc = self.part.fc
         self.tokens = self.part.tokens
 
     # @abstractmethod
@@ -27,7 +28,7 @@ class GeneralHandler(BaseHandler):
     remove_sign = False
 
     def configure(self):
-        if self.part.fc.neg_part == self.part and self.part.fc.else_part.tokens is None:
+        if self.fc.neg_part == self.part:
             self.remove_sign = True
 
     def format(self, v):
@@ -63,8 +64,13 @@ class TimeDeltaHandler(BaseHandler):
 
 
 class EmptyHandler(BaseHandler):
-    pass
+    def format(self, v):
+        return ''
 
 
 class UnknownHandler(BaseHandler):
-    pass
+    def format(self, v):
+        if self.fc.str_part == self.part:
+            return v
+        else:
+            return '###'
