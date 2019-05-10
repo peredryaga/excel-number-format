@@ -76,10 +76,6 @@ class SlashSymbol(SingleSymbolToken):
     symbol = locals.SLASH
 
 
-class AsteriskSymbol(SingleSymbolToken):
-    symbol = locals.ASTERISK
-
-
 class UnderscoreSymbol(SingleSymbolToken):
     symbol = locals.UNDERSCORE
 
@@ -98,6 +94,10 @@ class RegexpToken(Token):
 
     def __getattr__(self, item):
         return self.cleaned_data[item]
+
+
+class AsteriskSymbol(RegexpToken):
+    regexp = re.compile(r'(?P<value>(?<=^\*).)')
 
 
 class StringSymbol(RegexpToken):

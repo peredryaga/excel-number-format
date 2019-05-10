@@ -33,7 +33,7 @@ examples = (
                                                             HashToken, StringSymbol, LocaleCurrencyToken]),
     ('[$$-409]0.0;#.#\\ [$$-409]', [LocaleCurrencyToken, ZeroToken, DotDelimiter, ZeroToken, BlockDelimiter,
                                     HashToken, DotDelimiter, HashToken, StringSymbol, LocaleCurrencyToken]),
-    ('-* 0.0', [StringSymbol, AsteriskSymbol, StringSymbol, ZeroToken, DotDelimiter, ZeroToken]),
+    ('-* 0.0', [StringSymbol, AsteriskSymbol, ZeroToken, DotDelimiter, ZeroToken]),
     ('_ 0.0', [UnderscoreSymbol, StringSymbol, ZeroToken, DotDelimiter, ZeroToken]),
     ('0.0', [ZeroToken, DotDelimiter, ZeroToken]),
     ('0.0E-123', [ZeroToken, DotDelimiter, ZeroToken, EToken]),

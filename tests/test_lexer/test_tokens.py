@@ -82,10 +82,10 @@ def test_at():
 
 
 def test_asterisk():
-    assert AsteriskSymbol.match('*') == 1
+    assert AsteriskSymbol.match('*0') == 2
     assert AsteriskSymbol.match('1') is None
 
-    assert AsteriskSymbol('*').cleaned_data == '*'
+    assert AsteriskSymbol('*0').value == '0'
 
 
 def test_underscore():
