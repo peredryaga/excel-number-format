@@ -5,10 +5,10 @@ from __future__ import division, print_function, unicode_literals
 import pytest
 from six import text_type
 
-from formatcode.converter.errors import ConditionError, DateDigitError, IllegalPartToken
-from formatcode.converter.handlers import (DateHandler, DigitHandler, EmptyHandler, StringHandler, TimeDeltaHandler,
-                                           UnknownHandler)
-from formatcode.converter.parts import NegativePart, PositivePart, StringPart, ZeroPart
+from formatcode.convert.errors import ConditionError, DateDigitError, IllegalPartToken
+from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, StringHandler, TimeDeltaHandler,
+                                         UnknownHandler)
+from formatcode.convert.parts import NegativePart, PositivePart, StringPart, ZeroPart
 from formatcode.lexer.lexer import to_tokens_line
 
 

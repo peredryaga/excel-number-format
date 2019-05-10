@@ -2,7 +2,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from formatcode.converter.utils import split_tokens
+from formatcode.convert.utils import split_tokens
 from formatcode.lexer.tokens import (BlockDelimiter, ColorToken, ConditionToken, DotDelimiter,
                                      ZeroToken)
 
