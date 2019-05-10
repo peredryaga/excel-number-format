@@ -2,51 +2,148 @@
 
 from __future__ import division, print_function, unicode_literals
 
+from abc import ABC, abstractmethod
+from decimal import Decimal
+from operator import eq, ge, gt, le, lt, ne
 
-class FormatPart(object):
+from six import iteritems
+
+from formatcode.base.utils import cached_property, is_digit
+from formatcode.converter.errors import ConditionError, DateDigitError, IllegalPartToken
+from formatcode.converter.handlers import (DateHandler, DigitHandler, EmptyHandler, StringHandler, TimeDeltaHandler,
+                                           UnknownHandler)
+from formatcode.lexer.tokens import (AtSymbol, ConditionToken, DateTimeToken, DigitToken, StringSymbol, TimeDeltaToken)
+
+
+class FormatPart(ABC):
     color = None
-    condition = None
-    currency = None
-    language_id = None
-    calendar_type = None
     number_system = None
 
-    def check_condition(self, value):
+    def __init__(self, tokens=None):
+        self.tokens = tokens
+        self.token_types = [t.__class__ for t in self.tokens or []]
+        self.validate()
+
+    @abstractmethod
+    def get_handler(self):
         pass
+
+    @abstractmethod
+    def get_checker(self):
+        pass
+
+    def get_token_by_type(self, token_type):
+        return self.tokens[self.token_types.index(token_type)]
+
+    @cached_property
+    def checker(self):
+        return self.get_checker()
+
+    def check_value(self, v):
+        return self.checker(v)
+
+    def validate(self):
+        pass
+
+    @cached_property
+    def handler(self):
+        if self.tokens is None:
+            return UnknownHandler
+        elif self.tokens:
+            return self.get_handler()
+        else:
+            return EmptyHandler
 
     def format(self, value):
         pass
 
 
-class DigitFormat(FormatPart):
-    by_thousand = False
+class DigitPart(FormatPart):
+    handlers = {
+        TimeDeltaToken: TimeDeltaHandler,
+        DateTimeToken: DateHandler
+    }
+
+    def validate(self):
+        super(DigitPart, self).validate()
+
+        if any(isinstance(t, DigitToken) for t in self.tokens) and DateTimeToken in self.token_types:
+            raise DateDigitError(self.tokens)
+        elif AtSymbol in self.token_types:
+            raise IllegalPartToken(self.tokens)
+
+    def get_handler(self):
+        for token_type, handler in iteritems(self.handlers):
+            if token_type in self.token_types:
+                return handler
+        else:
+            return DigitHandler
+
+    @staticmethod
+    def clean(value):
+        return Decimal(value)
+
+    def check_value(self, v):
+        try:
+            v = self.clean(v)
+        except:
+            return False
+
+        return self.checker(v)
 
 
-class IntegerFormat(FormatPart):
-    integer_mask = []
+class ConditionFreePart(FormatPart):
+    def validate(self):
+        super(ConditionFreePart, self).validate()
 
-    def get_integer_mask(self, tokens):
-        pass
-
-
-class FloatFormat(IntegerFormat):
-    fractional_mask = []
-
-    def get_fractional_mask(self, tokens):
-        pass
+        if ConditionToken in self.token_types:
+            raise ConditionError(self.tokens)
 
 
-class StringFormat(FormatPart):
-    pass
+class ConditionPart(DigitPart):
+    functions = {
+        '<': lt,
+        '<=': le,
+        '=': eq,
+        '<>': ne,
+        '>=': ge,
+        '>': gt,
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(ConditionPart, self).__init__(*args, **kwargs)
+        self.checker = self.get_condition_checker() or self.get_checker()
+
+    def get_condition_checker(self):
+        if ConditionToken in self.token_types:
+            token = self.get_token_by_type(ConditionToken)
+            return lambda v: self.functions[token.op](v, token.value)
 
 
-class DateFormat(FormatPart):
-    pass
+class PositivePart(ConditionPart):
+    def get_checker(self):
+        return lambda v: v > 0
 
 
-class TimeDeltaFormat(FormatPart):
-    pass
+class NegativePart(ConditionPart):
+    def get_checker(self):
+        return lambda v: v < 0
 
 
-class EmptyFormat(FormatPart):
-    pass
+class ZeroPart(ConditionFreePart, DigitPart):
+    def get_checker(self):
+        return lambda v: v == 0
+
+
+class StringPart(ConditionFreePart):
+    def validate(self):
+        super(StringPart, self).validate()
+
+        if set(self.token_types) - {StringSymbol, AtSymbol}:
+            raise IllegalPartToken(self.tokens)
+
+    def get_checker(self):
+        return lambda v: not is_digit(v)
+
+    def get_handler(self):
+        return StringHandler

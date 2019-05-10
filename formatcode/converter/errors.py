@@ -17,5 +17,9 @@ class PartsCountError(ConverterError):
     pass
 
 
-class PartTypeError(ConverterError):
+class DateDigitError(ConverterError):
+    pass
+
+
+class IllegalPartToken(ConverterError):
     pass
