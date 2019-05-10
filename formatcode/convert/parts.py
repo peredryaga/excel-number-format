@@ -9,10 +9,11 @@ from operator import eq, ge, gt, le, lt, ne
 from six import iteritems
 
 from formatcode.base.utils import cached_property, is_digit
-from formatcode.convert.errors import ConditionError, DateDigitError, IllegalPartToken
-from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, StringHandler, TimeDeltaHandler,
-                                         UnknownHandler)
-from formatcode.lexer.tokens import (AtSymbol, ConditionToken, DateTimeToken, DigitToken, StringSymbol, TimeDeltaToken)
+from formatcode.convert.errors import ConditionError, DateDigitError, GeneralFormatError, IllegalPartToken
+from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, GeneralHandler, StringHandler,
+                                         TimeDeltaHandler, UnknownHandler)
+from formatcode.lexer.tokens import (AtSymbol, ConditionToken, DateTimeToken, DigitToken, GeneralToken, StringSymbol,
+                                     TimeDeltaToken)
 
 
 class FormatPart(ABC):
@@ -47,14 +48,18 @@ class FormatPart(ABC):
         return self.checker(v)
 
     def validate(self):
-        pass
+        if GeneralToken in self.token_types and len(self.token_types) > 1:
+            raise GeneralFormatError(self.tokens)
 
     @property
     def handler_class(self):
         if self.tokens is None:
             return UnknownHandler
         elif self.tokens:
-            return self.get_handler()
+            if GeneralToken in self.token_types:
+                return GeneralHandler
+            else:
+                return self.get_handler()
         else:
             return EmptyHandler
 

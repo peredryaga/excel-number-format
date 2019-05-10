@@ -5,10 +5,17 @@ from __future__ import division, print_function, unicode_literals
 import pytest
 from six.moves import range
 
-from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, ColorToken, CommaDelimiter, ConditionToken,
-                                     DateTimeToken, DotDelimiter, HashToken, LocaleCurrencyToken, PercentageSymbol,
-                                     QToken, EToken, StringSymbol, TimeDeltaToken, UnderscoreSymbol,
-                                     ZeroToken, BlockDelimiter)
+from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, BlockDelimiter, ColorToken, CommaDelimiter,
+                                     ConditionToken, DateTimeToken, DotDelimiter, EToken, GeneralToken, HashToken,
+                                     LocaleCurrencyToken, PercentageSymbol, QToken, StringSymbol, TimeDeltaToken,
+                                     UnderscoreSymbol, ZeroToken)
+
+
+def test_general_token():
+    assert GeneralToken.match('General') == len('General')
+    assert GeneralToken.match('1') is None
+
+    assert GeneralToken('General').cleaned_data == 'General'
 
 
 def test_block_delimiter():

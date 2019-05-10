@@ -11,6 +11,10 @@ class BaseHandler(object):
         return v
 
 
+class GeneralHandler(BaseHandler):
+    pass
+
+
 class DigitHandler(BaseHandler):
     pass
 

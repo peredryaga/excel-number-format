@@ -23,3 +23,7 @@ class DateDigitError(ConverterError):
 
 class IllegalPartToken(ConverterError):
     pass
+
+
+class GeneralFormatError(ConverterError):
+    pass

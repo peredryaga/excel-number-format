@@ -5,9 +5,9 @@ from __future__ import division, print_function, unicode_literals
 import pytest
 from six import text_type
 
-from formatcode.convert.errors import ConditionError, DateDigitError, IllegalPartToken
+from formatcode.convert.errors import ConditionError, DateDigitError, IllegalPartToken, GeneralFormatError
 from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, StringHandler, TimeDeltaHandler,
-                                         UnknownHandler)
+                                         UnknownHandler, GeneralHandler)
 from formatcode.convert.parts import NegativePart, PositivePart, StringPart, ZeroPart
 from formatcode.lexer.lexer import to_tokens_line
 
@@ -21,10 +21,6 @@ def test_positive_part(value):
     assert part.handler_class == DigitHandler
     assert part.check_value(value) is is_positive
     assert part.check_value(text_type(value)) is is_positive
-
-    tokens = to_tokens_line('yy:mm:dd')
-    part = PositivePart(tokens=tokens)
-    assert part.handler_class == DateHandler
 
 
 @pytest.mark.parametrize('value', [1234, 1234.1234, 0, u'string', None])
@@ -61,6 +57,7 @@ def test_string_part(value):
 
 
 def test_handler_detect():
+    assert PositivePart(tokens=to_tokens_line('General')).handler_class == GeneralHandler
     assert PositivePart(tokens=to_tokens_line('0.0')).handler_class == DigitHandler
     assert PositivePart(tokens=to_tokens_line('"hello"')).handler_class == DigitHandler
     assert PositivePart(tokens=to_tokens_line('yy:mm:dd')).handler_class == DateHandler
@@ -73,6 +70,10 @@ def test_handler_detect():
 
 
 def test_part_validate():
+    # GeneralFormatError
+    with pytest.raises(GeneralFormatError):
+        PositivePart(tokens=to_tokens_line('General0.0General'))
+
     # DateDigitError
     with pytest.raises(DateDigitError):
         PositivePart(tokens=to_tokens_line('yy.00'))

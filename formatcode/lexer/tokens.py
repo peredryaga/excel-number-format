@@ -29,11 +29,15 @@ class SingleSymbolToken(Token):
     @classmethod
     def match(cls, line):
         if line.startswith(cls.symbol):
-            return 1
+            return len(cls.symbol)
+
+
+class GeneralToken(SingleSymbolToken):
+    symbol = locals.GENERAL
 
 
 class BlockDelimiter(SingleSymbolToken):
-    symbol = ';'
+    symbol = locals.BLOCK_DELIMITER
 
 
 class DigitToken(SingleSymbolToken):

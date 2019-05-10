@@ -2,14 +2,16 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from formatcode.lexer.lexer import to_tokens_line, DuplicateUniqueToken, MatchError
-from formatcode.lexer.tokens import (HashToken, DotDelimiter, ZeroToken, QToken, CommaDelimiter, StringSymbol,
-                                     DateTimeToken, AmPmToken, TimeDeltaToken, BlockDelimiter, PercentageSymbol,
-                                     AtSymbol, AsteriskSymbol, UnderscoreSymbol, EToken, ColorToken, ConditionToken,
-                                     LocaleCurrencyToken)
 import pytest
 
+from formatcode.lexer.lexer import DuplicateUniqueToken, MatchError, to_tokens_line
+from formatcode.lexer.tokens import (AmPmToken, AsteriskSymbol, AtSymbol, BlockDelimiter, ColorToken, CommaDelimiter,
+                                     ConditionToken, DateTimeToken, DotDelimiter, EToken, GeneralToken, HashToken,
+                                     LocaleCurrencyToken, PercentageSymbol, QToken, StringSymbol, TimeDeltaToken,
+                                     UnderscoreSymbol, ZeroToken)
+
 examples = (
+    ('General', [GeneralToken]),
     ('####.#', [HashToken] * 4 + [DotDelimiter] + [HashToken]),
     ('#.000', [HashToken] + [DotDelimiter] + [ZeroToken] * 3),
     ('0.#', [ZeroToken, DotDelimiter, HashToken]),
