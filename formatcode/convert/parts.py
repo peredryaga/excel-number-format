@@ -109,6 +109,9 @@ class DigitPart(FormatPart):
         if AtSymbol in self.unique_tokens:
             raise IllegalPartToken(self.tokens)
 
+        if TimeDeltaToken in self.unique_tokens and SlashSymbol in self.unique_tokens:
+            raise IllegalPartToken(self.tokens)
+
     def get_handler(self):
         for token_type, handler in iteritems(self.handlers):
             if token_type in self.unique_tokens:

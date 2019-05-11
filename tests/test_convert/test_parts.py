@@ -135,6 +135,9 @@ def test_part_validate(fc):
     with pytest.raises(IllegalPartToken):
         ZeroPart(fc=fc, tokens=to_tokens_line('@0.0'))
 
+    with pytest.raises(IllegalPartToken):
+        ZeroPart(fc=fc, tokens=to_tokens_line('[h]:mm" "?/?'))
+
 
 @pytest.mark.parametrize('symbol,r1,r2,r3', (
         ('<', False, False, True),
