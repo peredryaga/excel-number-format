@@ -9,11 +9,12 @@ from operator import eq, ge, gt, le, lt, ne
 from six import iteritems
 
 from formatcode.base.utils import cached_property, is_digit
-from formatcode.convert.errors import ConditionError, DateDigitError, GeneralFormatError, IllegalPartToken
+from formatcode.convert.errors import (ConditionError, DateDigitError, GeneralFormatError, IllegalPartToken,
+                                       DuplicateFractionFormat)
 from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, GeneralHandler, StringHandler,
                                          TimeDeltaHandler, UnknownHandler)
 from formatcode.lexer.tokens import (AtSymbol, ConditionToken, DateTimeToken, DigitToken, GeneralToken, StringSymbol,
-                                     TimeDeltaToken, ColorToken, LocaleCurrencyToken)
+                                     TimeDeltaToken, ColorToken, LocaleCurrencyToken, DotDelimiter, SlashSymbol)
 
 common_tokens = {ColorToken, LocaleCurrencyToken}
 
@@ -101,6 +102,9 @@ class DigitPart(FormatPart):
                 and TimeDeltaToken not in self.unique_tokens \
                 and any(isinstance(t, DigitToken) for t in self.tokens):
             raise DateDigitError(self.tokens)
+
+        if DotDelimiter in self.unique_tokens and SlashSymbol in self.unique_tokens:
+            raise DuplicateFractionFormat(self.tokens)
 
         if AtSymbol in self.unique_tokens:
             raise IllegalPartToken(self.tokens)

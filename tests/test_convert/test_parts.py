@@ -2,15 +2,17 @@
 
 from __future__ import division, print_function, unicode_literals
 
+from decimal import Decimal
+
 import pytest
 from six import text_type
 
-from formatcode.convert.errors import ConditionError, DateDigitError, IllegalPartToken, GeneralFormatError
-from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, StringHandler, TimeDeltaHandler,
-                                         UnknownHandler, GeneralHandler)
+from formatcode.convert.errors import (ConditionError, DateDigitError, DuplicateFractionFormat, GeneralFormatError,
+                                       IllegalPartToken)
+from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, GeneralHandler, StringHandler,
+                                         TimeDeltaHandler, UnknownHandler)
 from formatcode.convert.parts import NegativePart, PositivePart, StringPart, ZeroPart
 from formatcode.lexer.lexer import to_tokens_line
-from decimal import Decimal
 
 
 def to_decimal(value):
@@ -98,6 +100,10 @@ def test_part_validate(fc):
     # GeneralFormatError
     with pytest.raises(GeneralFormatError):
         PositivePart(fc=fc, tokens=to_tokens_line('General0.0General'))
+
+    # DuplicateFractionFormat
+    with pytest.raises(DuplicateFractionFormat):
+        PositivePart(fc=fc, tokens=to_tokens_line('0.00/0'))
 
     # DateDigitError
     with pytest.raises(DateDigitError):

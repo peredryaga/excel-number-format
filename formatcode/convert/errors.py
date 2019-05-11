@@ -27,3 +27,7 @@ class IllegalPartToken(ConverterError):
 
 class GeneralFormatError(ConverterError):
     pass
+
+
+class DuplicateFractionFormat(ConverterError):
+    pass
