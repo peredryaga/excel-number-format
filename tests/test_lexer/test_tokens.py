@@ -22,7 +22,10 @@ def test_slash_token():
     assert SlashSymbol.match('/') == 1
     assert SlashSymbol.match('1') is None
 
-    assert SlashSymbol('/').cleaned_data == '/'
+    assert SlashSymbol('/').value is None
+
+    assert SlashSymbol.match('/1234') == 5
+    assert SlashSymbol('/1234').value == 1234
 
 
 def test_block_delimiter():

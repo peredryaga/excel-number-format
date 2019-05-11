@@ -18,6 +18,7 @@ examples = (
     ('#.0#', [HashToken, DotDelimiter, ZeroToken, HashToken]),
     ('???.???', [QToken] * 3 + [DotDelimiter] + [QToken] * 3),
     ('#" "???/???', [HashToken, StringSymbol] + [QToken] * 3 + [SlashSymbol] + [QToken] * 3),
+    ('#" "???/100', [HashToken, StringSymbol] + [QToken] * 3 + [SlashSymbol]),
     ('#,###', [HashToken, CommaDelimiter] + [HashToken] * 3),
     ('#,', [HashToken, CommaDelimiter]),
     ('0.0', [ZeroToken, DotDelimiter, ZeroToken]),
