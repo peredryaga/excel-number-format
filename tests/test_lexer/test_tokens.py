@@ -125,15 +125,12 @@ def test_string_with_quote():
 
 @pytest.mark.parametrize('letter', ['E', 'e'])
 @pytest.mark.parametrize('sign', ['-', '+'])
-@pytest.mark.parametrize('base', ['0', '00', '12', '555'])
-def test_scientific_notation(letter, sign, base):
-    line = letter + sign + base
+def test_scientific_notation(letter, sign):
+    line = letter + sign
     assert EToken.match(line) == len(line)
 
     token = EToken(line)
-    assert token.letter == letter
-    assert token.sign == sign
-    assert token.base == int(base)
+    assert token.value == sign
 
     assert EToken.match(line + 'test') == len(line)
     assert EToken.match('test' + line) is None

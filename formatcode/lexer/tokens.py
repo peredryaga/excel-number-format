@@ -116,12 +116,7 @@ class StringSymbol(RegexpToken):
 
 
 class EToken(RegexpToken):
-    regexp = re.compile(r'^(?P<letter>[eE])(?P<sign>[\-+])(?P<base>[0-9]+)')
-
-    def clean(self, value):
-        m = super(EToken, self).clean(value)
-        m['base'] = int(m['base'])
-        return m
+    regexp = re.compile(r'(?P<value>(?<=^[Ee])[+-])')
 
 
 class ColorToken(RegexpToken):

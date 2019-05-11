@@ -9,7 +9,7 @@ from six import text_type
 
 from formatcode.convert.errors import IllegalPartToken
 from formatcode.convert.utils import split_tokens
-from formatcode.lexer.tokens import (AtSymbol, CommaDelimiter, DigitToken, DotDelimiter, LocaleCurrencyToken,
+from formatcode.lexer.tokens import (AtSymbol, CommaDelimiter, DigitToken, DotDelimiter, EToken, LocaleCurrencyToken,
                                      PercentageSymbol, SlashSymbol, StringSymbol)
 
 
@@ -72,6 +72,9 @@ class DigitHandler(BaseHandler):
                 else:
                     right.insert(0, left.pop())
             return left, right
+        elif EToken in self.part.unique_tokens:
+            index = self.part.token_types.index(EToken)
+            return self.tokens[:index], self.tokens[index:]
         else:
             return self.tokens, []
 

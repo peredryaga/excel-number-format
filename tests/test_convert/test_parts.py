@@ -105,6 +105,9 @@ def test_part_validate(fc):
     with pytest.raises(DuplicateFractionFormat):
         PositivePart(fc=fc, tokens=to_tokens_line('0.00/0'))
 
+    with pytest.raises(DuplicateFractionFormat):
+        PositivePart(fc=fc, tokens=to_tokens_line('0/0E+0'))
+
     # DateDigitError
     with pytest.raises(DateDigitError):
         PositivePart(fc=fc, tokens=to_tokens_line('yy.00'))
