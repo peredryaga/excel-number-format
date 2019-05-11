@@ -7,26 +7,22 @@ from decimal import Decimal
 import pytest
 
 from formatcode.convert.fc import FormatCode
-from formatcode.convert.handlers import (GeneralHandler, StringHandler, EmptyHandler, UnknownHandler, DigitHandler)
-from formatcode.lexer.lexer import to_tokens_line
+from formatcode.convert.handlers import (DigitHandler, EmptyHandler, GeneralHandler, StringHandler, UnknownHandler)
 
 
 @pytest.fixture(scope='module')
 def fc_1():
-    tokens = to_tokens_line('0,,;\\-0" "?/10%;General;"Hello, "@\\!')
-    return FormatCode(tokens=tokens)
+    return FormatCode('0,,;\\-0" "?/10%;General;"Hello, "@\\!')
 
 
 @pytest.fixture(scope='module')
 def fc_2():
-    tokens = to_tokens_line('0,000.0,;0" "?/?;;@[$$]')
-    return FormatCode(tokens=tokens)
+    return FormatCode('0,000.0,;0" "?/?;;@[$$]')
 
 
 @pytest.fixture(scope='module')
 def fc_3():
-    tokens = to_tokens_line('0,0.0;General')
-    return FormatCode(tokens=tokens)
+    return FormatCode('0,0.0;General')
 
 
 def test_general_handler(fc_1, fc_3):
@@ -76,7 +72,7 @@ def test_unknown_handler(fc_3):
 
 
 def test_digit_handler():
-    fc_1 = FormatCode(tokens=to_tokens_line('0,,;\\-0" "?/10%;General;"Hello, "@\\!'))
+    fc_1 = FormatCode('0,,;\\-0" "?/10%;General;"Hello, "@\\!')
 
     pos_h = fc_1.pos_part.handler
     assert isinstance(pos_h, DigitHandler)
@@ -98,7 +94,7 @@ def test_digit_handler():
     assert len(neg_h.left) == 3
     assert len(neg_h.right) == 3
 
-    fc_2 = FormatCode(tokens=to_tokens_line('0,000.0,;0" "?/?;;@[$$]'))
+    fc_2 = FormatCode('0,000.0,;0" "?/?;;@[$$]')
     pos_h = fc_2.pos_part.handler
     assert isinstance(pos_h, DigitHandler)
     assert pos_h.by_thousand is True

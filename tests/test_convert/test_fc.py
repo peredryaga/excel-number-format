@@ -7,12 +7,10 @@ import pytest
 from formatcode.convert.errors import PartsCountError
 from formatcode.convert.fc import FormatCode
 from formatcode.convert.parts import NegativePart, PositivePart, StringPart, ZeroPart
-from formatcode.lexer.lexer import to_tokens_line
 
 
 def test_parts_from_tokens():
-    tokens = to_tokens_line('0.0;\\-0.0;General;"Hello, "@')
-    fc = FormatCode(tokens=tokens)
+    fc = FormatCode('0.0;\\-0.0;General;"Hello, "@')
 
     assert isinstance(fc.parts[0], PositivePart)
     assert len(fc.parts[0].tokens) == 3
@@ -28,9 +26,9 @@ def test_parts_from_tokens():
     assert len(fc.parts[3].tokens) == 2
 
     with pytest.raises(PartsCountError):
-        FormatCode(tokens=to_tokens_line('0.0;\\-0.0;General;"Hello, "@;0.0'))
+        FormatCode('0.0;\\-0.0;General;"Hello, "@;0.0')
 
-    fc = FormatCode(tokens=to_tokens_line('0.0'))
+    fc = FormatCode('0.0')
     assert fc.parts[1].tokens is None
     assert fc.parts[2].tokens is None
     assert fc.parts[3].tokens is None

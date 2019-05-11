@@ -7,15 +7,17 @@ from six.moves import zip_longest
 from formatcode.convert.errors import PartsCountError
 from formatcode.convert.parts import NegativePart, PositivePart, StringPart, ZeroPart
 from formatcode.convert.utils import split_tokens
+from formatcode.lexer.lexer import to_tokens_line
 from formatcode.lexer.tokens import BlockDelimiter
 
 parts_types = (PositivePart, NegativePart, ZeroPart, StringPart)
 
 
 class FormatCode(object):
-    def __init__(self, tokens, asterisk_repeat_count=0):
+    def __init__(self, line, asterisk_repeat_count=0):
         self.asterisk_repeat_count = asterisk_repeat_count
 
+        tokens = to_tokens_line(line)
         self.parts = self.parts_from_tokens(tokens)
         self.pos_part, self.neg_part, self.else_part, self.str_part = self.parts
 
