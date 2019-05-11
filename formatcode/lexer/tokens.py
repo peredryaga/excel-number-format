@@ -31,6 +31,10 @@ class SingleSymbolToken(Token):
         if line.startswith(cls.symbol):
             return len(cls.symbol)
 
+    @property
+    def value(self):
+        return self.symbol
+
 
 class GeneralToken(SingleSymbolToken):
     symbol = locals.GENERAL

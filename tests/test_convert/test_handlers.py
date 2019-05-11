@@ -81,8 +81,10 @@ def test_digit_handler():
     assert pos_h.fraction_divisor is None
     assert pos_h.fraction_divisor_size is None
     assert pos_h.divisor == 1000000
-    assert len(pos_h.left) == 3
-    assert len(pos_h.right) == 0
+    assert pos_h.e_base is None
+    assert len(pos_h.left_mask) == 1
+    assert len(pos_h.right_mask) == 0
+    assert len(pos_h.extension_mask) == 0
 
     neg_h = fc_1.neg_part.handler
     assert isinstance(neg_h, DigitHandler)
@@ -91,19 +93,23 @@ def test_digit_handler():
     assert neg_h.fraction_divisor == 10
     assert neg_h.fraction_divisor_size is None
     assert neg_h.divisor == 0.01
-    assert len(neg_h.left) == 3
-    assert len(neg_h.right) == 3
+    assert neg_h.e_base is None
+    assert len(neg_h.left_mask) == 3
+    assert len(neg_h.right_mask) == 1
+    assert len(neg_h.extension_mask) == 2
 
-    fc_2 = FormatCode('0,000.0,;0" "?/?;;@[$$]')
+    fc_2 = FormatCode('0,000.0E+00;0" "?/?;;@[$$]')
     pos_h = fc_2.pos_part.handler
     assert isinstance(pos_h, DigitHandler)
     assert pos_h.by_thousand is True
     assert pos_h.round_base == 1
     assert pos_h.fraction_divisor is None
     assert pos_h.fraction_divisor_size is None
-    assert pos_h.divisor == 1000
-    assert len(pos_h.left) == 5
-    assert len(pos_h.right) == 2
+    assert pos_h.divisor == 1
+    assert pos_h.e_base == 4
+    assert len(pos_h.left_mask) == 5
+    assert len(pos_h.right_mask) == 1
+    assert len(pos_h.extension_mask) == 3
 
     neg_h = fc_2.neg_part.handler
     assert isinstance(neg_h, DigitHandler)
@@ -112,5 +118,7 @@ def test_digit_handler():
     assert neg_h.fraction_divisor is None
     assert neg_h.fraction_divisor_size == 1
     assert neg_h.divisor == 1
-    assert len(neg_h.left) == 2
-    assert len(neg_h.right) == 3
+    assert neg_h.e_base is None
+    assert len(neg_h.left_mask) == 2
+    assert len(neg_h.right_mask) == 1
+    assert len(neg_h.extension_mask) == 2
