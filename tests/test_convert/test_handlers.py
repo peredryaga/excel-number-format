@@ -19,7 +19,7 @@ def fc_1():
 
 @pytest.fixture(scope='module')
 def fc_2():
-    tokens = to_tokens_line('0.0;General;;@')
+    tokens = to_tokens_line('0.0;General;;@[$$]')
     return FormatCode(tokens=tokens)
 
 
@@ -52,8 +52,8 @@ def test_string_handler(fc_1, fc_2):
 
     h = fc_2.str_part.handler
     assert isinstance(h, StringHandler)
-    assert h.format('John') == 'John'
-    assert h.format('mister') == 'mister'
+    assert h.format('John') == 'John$'
+    assert h.format('mister') == 'mister$'
 
 
 def test_empty_handler(fc_2):

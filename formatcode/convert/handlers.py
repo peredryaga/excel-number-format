@@ -4,7 +4,7 @@ from __future__ import division, print_function, unicode_literals
 from abc import ABC, abstractmethod
 from decimal import Decimal
 from six import text_type
-from formatcode.lexer.tokens import AtSymbol
+from formatcode.lexer.tokens import AtSymbol, LocaleCurrencyToken
 
 
 class BaseHandler(ABC):
@@ -50,6 +50,8 @@ class StringHandler(BaseHandler):
         for token in self.tokens:
             if isinstance(token, AtSymbol):
                 line.append(v)
+            elif isinstance(token, LocaleCurrencyToken):
+                line.append(self.part.currency)
             else:
                 line.append(token.value)
         return ''.join(line)
@@ -65,7 +67,7 @@ class TimeDeltaHandler(BaseHandler):
 
 class EmptyHandler(BaseHandler):
     def format(self, v):
-        return ''
+        return self.part.currency
 
 
 class UnknownHandler(BaseHandler):

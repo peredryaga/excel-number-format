@@ -13,11 +13,16 @@ from formatcode.convert.errors import ConditionError, DateDigitError, GeneralFor
 from formatcode.convert.handlers import (DateHandler, DigitHandler, EmptyHandler, GeneralHandler, StringHandler,
                                          TimeDeltaHandler, UnknownHandler)
 from formatcode.lexer.tokens import (AtSymbol, ConditionToken, DateTimeToken, DigitToken, GeneralToken, StringSymbol,
-                                     TimeDeltaToken)
+                                     TimeDeltaToken, ColorToken, LocaleCurrencyToken)
+
+common_tokens = {ColorToken, LocaleCurrencyToken}
 
 
 class FormatPart(ABC):
     color = None
+    currency = ''
+    language_id = None
+    calendar_type = None
     number_system = None
 
     def __init__(self, fc, tokens=None):
@@ -29,6 +34,18 @@ class FormatPart(ABC):
         self.fc = fc
 
         self.token_types = [t.__class__ for t in self.tokens or []]
+        self.unique_tokens = set(self.token_types) - common_tokens
+
+        if ColorToken in self.token_types:
+            self.color = self.get_token_by_type(ColorToken).value
+
+        if LocaleCurrencyToken in self.token_types:
+            token = self.get_token_by_type(LocaleCurrencyToken)
+            self.currency = token.curr
+            self.language_id = token.language_id
+            self.calendar_type = token.calendar_type
+            self.number_system = token.number_system
+
         self.validate()
 
         self.handler = self.handler_class(part=self)
@@ -52,7 +69,7 @@ class FormatPart(ABC):
         return self.checker(v)
 
     def validate(self):
-        if GeneralToken in self.token_types and len(self.token_types) > 1:
+        if GeneralToken in self.unique_tokens and len(self.unique_tokens) > 1:
             raise GeneralFormatError(self.tokens)
 
     @property
@@ -60,7 +77,7 @@ class FormatPart(ABC):
         if self.tokens is None:
             return UnknownHandler
         elif self.tokens:
-            if GeneralToken in self.token_types:
+            if GeneralToken in self.unique_tokens:
                 return GeneralHandler
             else:
                 return self.get_handler()
@@ -80,17 +97,17 @@ class DigitPart(FormatPart):
     def validate(self):
         super(DigitPart, self).validate()
 
-        if DateTimeToken in self.token_types \
-                and TimeDeltaToken not in self.token_types \
+        if DateTimeToken in self.unique_tokens \
+                and TimeDeltaToken not in self.unique_tokens \
                 and any(isinstance(t, DigitToken) for t in self.tokens):
             raise DateDigitError(self.tokens)
 
-        if AtSymbol in self.token_types:
+        if AtSymbol in self.unique_tokens:
             raise IllegalPartToken(self.tokens)
 
     def get_handler(self):
         for token_type, handler in iteritems(self.handlers):
-            if token_type in self.token_types:
+            if token_type in self.unique_tokens:
                 return handler
         else:
             return DigitHandler
@@ -106,7 +123,7 @@ class ConditionFreePart(FormatPart):
     def validate(self):
         super(ConditionFreePart, self).validate()
 
-        if ConditionToken in self.token_types:
+        if ConditionToken in self.unique_tokens:
             raise ConditionError(self.tokens)
 
 
@@ -125,7 +142,7 @@ class ConditionPart(DigitPart):
         return self.get_condition_checker() or self.get_checker()
 
     def get_condition_checker(self):
-        if ConditionToken in self.token_types:
+        if ConditionToken in self.unique_tokens:
             token = self.get_token_by_type(ConditionToken)
             return lambda v: self.functions[token.op](v, token.value)
 
@@ -152,7 +169,7 @@ class StringPart(ConditionFreePart):
     def validate(self):
         super(StringPart, self).validate()
 
-        if set(self.token_types) - {StringSymbol, AtSymbol}:
+        if self.unique_tokens - {StringSymbol, AtSymbol}:
             raise IllegalPartToken(self.tokens)
 
     def get_checker(self):
