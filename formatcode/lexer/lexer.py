@@ -25,7 +25,8 @@ def to_tokens_line(line):
                 tokens_line.append(token)
 
                 # Some token types are unique to the block
-                if token_type in (TimeDeltaToken, ConditionToken, ColorToken, LocaleCurrencyToken):
+                if token_type in (TimeDeltaToken, ConditionToken, ColorToken, LocaleCurrencyToken,
+                                  SlashSymbol, DotDelimiter):
                     if token_type in block_tokens:
                         raise DuplicateUniqueToken(token, line)
                     else:

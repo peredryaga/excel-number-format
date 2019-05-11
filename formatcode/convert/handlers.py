@@ -16,7 +16,6 @@ class BaseHandler(ABC):
         self.fc = self.part.fc
         self.tokens = self.part.tokens
 
-    # @abstractmethod
     def configure(self):
         pass
 
